@@ -1,0 +1,110 @@
+/**
+ * Classe que representa um Aluno no sistema.
+ * Possui composição com a classe Professor (professor responsável).
+ */
+public class Aluno {
+
+    private String nome;
+    private int matricula;
+    private double nota1;
+    private double nota2;
+    private Professor professor; // Professor responsável pelo aluno
+
+    /**
+     * Construtor com validação dos dados.
+     */
+    public Aluno(String nome, int matricula, double nota1, double nota2) {
+        setNome(nome);
+        setMatricula(matricula);
+        setNota1(nota1);
+        setNota2(nota2);
+    }
+
+    // ---------- Getters e Setters ----------
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        if (nome == null || nome.trim().isEmpty()) {
+            throw new IllegalArgumentException("O nome do aluno não pode ser vazio.");
+        }
+        this.nome = nome;
+    }
+
+    public int getMatricula() {
+        return matricula;
+    }
+
+    public void setMatricula(int matricula) {
+        if (matricula <= 0) {
+            throw new IllegalArgumentException("A matrícula deve ser um número positivo.");
+        }
+        this.matricula = matricula;
+    }
+
+    public double getNota1() {
+        return nota1;
+    }
+
+    public void setNota1(double nota1) {
+        if (nota1 < 0 || nota1 > 10) {
+            throw new IllegalArgumentException("A nota 1 deve estar entre 0 e 10.");
+        }
+        this.nota1 = nota1;
+    }
+
+    public double getNota2() {
+        return nota2;
+    }
+
+    public void setNota2(double nota2) {
+        if (nota2 < 0 || nota2 > 10) {
+            throw new IllegalArgumentException("A nota 2 deve estar entre 0 e 10.");
+        }
+        this.nota2 = nota2;
+    }
+
+    public Professor getProfessor() {
+        return professor;
+    }
+
+    public void setProfessor(Professor professor) {
+        if (professor == null) {
+            throw new IllegalArgumentException("O professor responsável não pode ser nulo.");
+        }
+        this.professor = professor;
+    }
+
+    /**
+     * Calcula a média do aluno entre as duas notas.
+     */
+    public double calcularMedia() {
+        return (nota1 + nota2) / 2.0;
+    }
+
+    /**
+     * Exibe os dados do aluno, incluindo o professor associado (se houver).
+     */
+    public void exibir() {
+        System.out.println("---- Dados do Aluno ----");
+        System.out.println("Nome: " + nome);
+        System.out.println("Matrícula: " + matricula);
+        System.out.println("Nota 1: " + nota1);
+        System.out.println("Nota 2: " + nota2);
+        System.out.printf("Média: %.2f%n", calcularMedia());
+
+        if (professor != null) {
+            System.out.println("Professor Responsável: " + professor.getNome()
+                    + " (" + professor.getDisciplina() + ")");
+        } else {
+            System.out.println("Professor Responsável: não definido");
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "Aluno [matricula=" + matricula + ", nome=" + nome + ", média=" + calcularMedia() + "]";
+    }
+}
