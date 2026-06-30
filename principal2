@@ -1,0 +1,63 @@
+/**
+ * Classe principal para testar o sistema de Professores, Alunos e Turmas.
+ */
+public class Principal2 {
+
+    public static void main(String[] args) {
+
+        System.out.println("########## TESTE DO SISTEMA ##########\n");
+
+        // 1. Criando o professor
+        Professor professor1 = new Professor("Carlos Mendes", "Matemática", 10);
+
+        // 2. Criando os alunos
+        Aluno aluno1 = new Aluno("Ana Silva", 101, 8.5, 9.0);
+        Aluno aluno2 = new Aluno("Bruno Costa", 102, 6.0, 7.5);
+        Aluno aluno3 = new Aluno("Carla Souza", 103, 9.5, 10.0);
+
+        // 3. Associando o professor aos alunos
+        aluno1.setProfessor(professor1);
+        aluno2.setProfessor(professor1);
+        aluno3.setProfessor(professor1);
+
+        // 4. Criando a turma (capacidade máxima de 3 alunos, neste exemplo)
+        Turma turma1 = new Turma("Turma A - 9º Ano", 3, professor1);
+
+        // 5. Adicionando os alunos à turma
+        System.out.println(">>> Adicionando alunos à turma:");
+        turma1.adicionarAluno(aluno1);
+        turma1.adicionarAluno(aluno2);
+        turma1.adicionarAluno(aluno3);
+
+        // Testando validação de capacidade máxima
+        Aluno aluno4 = new Aluno("Daniel Pereira", 104, 7.0, 8.0);
+        turma1.adicionarAluno(aluno4); // deve falhar, pois a turma já está cheia
+
+        System.out.println();
+
+        // 6. Exibindo os dados completos da turma
+        System.out.println(">>> Exibindo dados completos da turma:");
+        turma1.exibirTurma();
+
+        System.out.println();
+
+        // 7. Calculando e exibindo a média geral (já mostrada em exibirTurma,
+        // mas reforçando o uso isolado do método)
+        System.out.printf(">>> Média geral calculada separadamente: %.2f%n%n", turma1.calcularMediaGeral());
+
+        // 8. Removendo um aluno (Bruno Costa, matrícula 102)
+        System.out.println(">>> Removendo aluno com matrícula 102:");
+        turma1.removerAluno(102);
+
+        // Testando remoção de matrícula inexistente
+        turma1.removerAluno(999);
+
+        System.out.println();
+
+        // 9. Exibindo novamente a turma após a remoção
+        System.out.println(">>> Exibindo turma após a remoção:");
+        turma1.exibirTurma();
+
+        System.out.println("\n########## FIM DOS TESTES ##########");
+    }
+}
