@@ -1,0 +1,181 @@
+/**
+ * Classe que representa uma Turma no sistema.
+ * Demonstra composição (Turma possui Alunos e um Professor)
+ * e manipulação de arrays de objetos.
+ */
+public class Turma {
+
+    private String nomeTurma;
+    private Aluno[] alunos;
+    private int quantidadeAlunos; // controla quantas posições do array estão ocupadas
+    private Professor professorResponsavel;
+    private int capacidadeMaxima;
+
+    /**
+     * Construtor da turma com validação dos dados.
+     */
+    public Turma(String nomeTurma, int capacidadeMaxima, Professor professorResponsavel) {
+        if (nomeTurma == null || nomeTurma.trim().isEmpty()) {
+            throw new IllegalArgumentException("O nome da turma não pode ser vazio.");
+        }
+        if (capacidadeMaxima <= 0) {
+            throw new IllegalArgumentException("A capacidade máxima deve ser maior que zero.");
+        }
+        if (professorResponsavel == null) {
+            throw new IllegalArgumentException("A turma precisa de um professor responsável.");
+        }
+
+        this.nomeTurma = nomeTurma;
+        this.capacidadeMaxima = capacidadeMaxima;
+        this.professorResponsavel = professorResponsavel;
+        this.alunos = new Aluno[capacidadeMaxima];
+        this.quantidadeAlunos = 0;
+    }
+
+    // ---------- Getters e Setters ----------
+
+    public String getNomeTurma() {
+        return nomeTurma;
+    }
+
+    public void setNomeTurma(String nomeTurma) {
+        if (nomeTurma == null || nomeTurma.trim().isEmpty()) {
+            throw new IllegalArgumentException("O nome da turma não pode ser vazio.");
+        }
+        this.nomeTurma = nomeTurma;
+    }
+
+    public Professor getProfessorResponsavel() {
+        return professorResponsavel;
+    }
+
+    public void setProfessorResponsavel(Professor professorResponsavel) {
+        if (professorResponsavel == null) {
+            throw new IllegalArgumentException("O professor responsável não pode ser nulo.");
+        }
+        this.professorResponsavel = professorResponsavel;
+    }
+
+    public int getCapacidadeMaxima() {
+        return capacidadeMaxima;
+    }
+
+    public int getQuantidadeAlunos() {
+        return quantidadeAlunos;
+    }
+
+    /**
+     * Adiciona um aluno à turma, verificando se há espaço disponível.
+     */
+    public void adicionarAluno(Aluno aluno) {
+        if (aluno == null) {
+            System.out.println("Erro: aluno inválido (nulo).");
+            return;
+        }
+        if (quantidadeAlunos >= capacidadeMaxima) {
+            System.out.println("Erro: a turma '" + nomeTurma + "' já atingiu a capacidade máxima ("
+                    + capacidadeMaxima + " alunos).");
+            return;
+        }
+
+        // Verifica se já existe aluno com a mesma matrícula
+        for (int i = 0; i < quantidadeAlunos; i++) {
+            if (alunos[i].getMatricula() == aluno.getMatricula()) {
+                System.out.println("Erro: já existe um aluno com a matrícula " + aluno.getMatricula());
+                return;
+            }
+        }
+
+        alunos[quantidadeAlunos] = aluno;
+        quantidadeAlunos++;
+        System.out.println("Aluno " + aluno.getNome() + " adicionado à turma com sucesso.");
+    }
+
+    /**
+     * Remove um aluno da turma a partir da matrícula, verificando se ele existe.
+     */
+    public void removerAluno(int matricula) {
+        int indiceEncontrado = -1;
+
+        for (int i = 0; i < quantidadeAlunos; i++) {
+            if (alunos[i].getMatricula() == matricula) {
+                indiceEncontrado = i;
+                break;
+            }
+        }
+
+        if (indiceEncontrado == -1) {
+            System.out.println("Erro: nenhum aluno encontrado com a matrícula " + matricula);
+            return;
+        }
+
+        System.out.println("Removendo aluno: " + alunos[indiceEncontrado].getNome());
+
+        // Desloca os elementos seguintes para preencher o espaço removido
+        for (int i = indiceEncontrado; i < quantidadeAlunos - 1; i++) {
+            alunos[i] = alunos[i + 1];
+        }
+
+        alunos[quantidadeAlunos - 1] = null;
+        quantidadeAlunos--;
+    }
+
+    /**
+     * Lista todos os alunos cadastrados na turma.
+     */
+    public void listarAlunos() {
+        System.out.println("---- Alunos da turma " + nomeTurma + " ----");
+
+        if (quantidadeAlunos == 0) {
+            System.out.println("Nenhum aluno cadastrado nesta turma.");
+            return;
+        }
+
+        for (int i = 0; i < quantidadeAlunos; i++) {
+            System.out.println((i + 1) + ". " + alunos[i]);
+        }
+    }
+
+    /**
+     * Calcula a média geral da turma com base na média de cada aluno.
+     */
+    public double calcularMediaGeral() {
+        if (quantidadeAlunos == 0) {
+            return 0.0;
+        }
+
+        double soma = 0.0;
+        for (int i = 0; i < quantidadeAlunos; i++) {
+            soma += alunos[i].calcularMedia();
+        }
+
+        return soma / quantidadeAlunos;
+    }
+
+    /**
+     * Exibe todas as informações da turma: dados gerais, professor,
+     * alunos e média geral.
+     */
+    public void exibirTurma() {
+        System.out.println("=====================================");
+        System.out.println("Turma: " + nomeTurma);
+        System.out.println("Capacidade: " + quantidadeAlunos + "/" + capacidadeMaxima);
+        System.out.println();
+
+        System.out.println("Professor Responsável pela Turma:");
+        professorResponsavel.exibir();
+        System.out.println();
+
+        if (quantidadeAlunos == 0) {
+            System.out.println("Nenhum aluno cadastrado nesta turma.");
+        } else {
+            for (int i = 0; i < quantidadeAlunos; i++) {
+                alunos[i].exibir();
+                System.out.println("-------------------------------------");
+            }
+        }
+
+        System.out.printf("Média geral da turma: %.2f%n", calcularMediaGeral());
+        System.out.println("=====================================");
+    }
+}
